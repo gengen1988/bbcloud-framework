@@ -1,0 +1,28 @@
+{
+  "name": "bbcloud-framework",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "bluebird": "^3.4.0",
+    "express": "^4.13.4",
+    "mongoose": "^4.4.17",
+    "nconf": "^0.8.4",
+    "seneca": "^2.0.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "istanbul": "^0.4.3",
+    "mocha": "^2.4.5"
+  },
+  "scripts": {
+    "test": "mocha",
+    "coverage": "istanbul cover node_modules/.bin/_mocha -- -- -u exports -R spec test/**/*"
+  },
+  "keywords": [],
+  "author": "GG",
+  "license": "MIT"
+}

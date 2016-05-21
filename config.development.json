@@ -1,0 +1,4 @@
+{
+  "mongodb": "mongodb://localhost/customer",
+  "authServicePort": 3000
+}
