@@ -1,4 +1,5 @@
 {
+  "secret": "secret",
   "mongodb": "mongodb://localhost/customer",
   "authServicePort": 3001,
   "wechat": {

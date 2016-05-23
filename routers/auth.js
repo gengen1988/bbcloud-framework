@@ -4,6 +4,9 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local');
 var WeChatStrategy = require('passport-wechat');
 var nconf = require('nconf');
+var jwt = require('jsonwebtoken');
+
+var secret = nconf.get('secret');
 
 var wechatOpts = {
   appID: nconf.get('wechat:appId'),
@@ -17,21 +20,29 @@ var wechatOpts = {
 passport.use(new LocalStrategy(CustomerAccount.authenticate()));
 passport.use(new WeChatStrategy(wechatOpts, wechatVerify));
 
-router.post('/auth/customer/login', passport.authenticate('local'));
-router.post('/auth/customer/wechat/authenticate', passport.authenticate('wechat'));
+router.post('/auth/customer/login', passport.authenticate('local', {session: false}), signIn);
+router.post('/auth/customer/wechat/authenticate', passport.authenticate('wechat', {session: false}), signIn);
 router.post('/auth/customer/register', signUp);
 
 function wechatVerify(accessToken, refreshToken, profile, done) {
   return done(null, profile);
 }
 
+function signIn(req, res, next) {
+  var customerId = req.user._id;
+
+  jwt.sign({realm: 'customer'}, secret, {subject: customerId}, function(err, token) {
+    res.json({token});
+  });
+}
+
 function signUp(req, res, next) {
   var mobilePhoneNumber = req.body.mobilePhoneNumber;
   var password = req.body.password;
 
-  CustomerAccount.register(new CustomerAccount({mobilePhoneNumber}), password).then(function() {
+  CustomerAccount.register(new CustomerAccount({mobilePhoneNumber}), password, function(err) {
     res.json({msg: 'ok'});
-  }).catch(next);
+  });
 }
 
 module.exports = router;

@@ -10,7 +10,10 @@ var customerAccountSchema = new Schema({
   password: String
 });
 
-customerAccountSchema.plugin(passportLocalMongoose);
+customerAccountSchema.plugin(passportLocalMongoose, {
+  usernameField: 'mobilePhoneNumber',
+  hashField: 'password'
+});
 
 var CustomerAccount = mongoose.model('CustomerAccount', customerAccountSchema);
 
