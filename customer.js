@@ -7,24 +7,19 @@ var mongoose = require('mongoose');
 module.exports = function(opts) {
 
   var seneca = this;
-  var customerServices = require('./services/customer');
 
-  // init module
+  // init actions
   seneca.add('init:customer', init);
-
-  // register services
-  seneca.add('role:customer, cmd:find-all', customerServices.findAll);
-  seneca.add('role:customer, cmd:create', customerServices.create);
-  seneca.add('role:customer, cmd:find-by-id', customerServices.findById);
-  seneca.add('role:customer, cmd:update-by-id', customerServices.updateById);
-  seneca.add('role:customer, cmd:destroy-by-id', customerServices.destroyById);
+  require('./actions')(seneca);
 
   return;
 
   function init(args, done) {
     var app = express();
+    var mongodb = opts.mongodb;
+    var authServicePort = opts.authServicePort;
 
-    mongoose.connect(opts.mongodb);
+    mongoose.connect(mongodb);
 
     // register middlewares
     app.use(cors());
@@ -32,7 +27,7 @@ module.exports = function(opts) {
     app.use(passport.initialize());
     app.use(require('./routers/auth'));
 
-    app.listen(opts.authServicePort, function() {done()});
+    app.listen(authServicePort, function() {done()});
   }
 
 };
