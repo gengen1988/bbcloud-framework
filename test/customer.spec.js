@@ -10,7 +10,7 @@ var NODE_ENV = nconf.get('NODE_ENV') || 'development';
 nconf.file({file: path.join(__dirname, '..', 'config.' + NODE_ENV + '.json')});
 
 // init seneca
-var seneca = senecaLib(nconf.get()).use('..');
+var seneca = senecaLib(nconf.get());
 var act = Promise.promisify(seneca.act, {context: seneca});
 
 describe('customer', function() {

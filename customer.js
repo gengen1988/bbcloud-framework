@@ -1,8 +1,8 @@
 var cors = require('cors');
 var bodyParser = require('body-parser');
-var express = require('express');
 var passport = require('passport');
-var mongoose = require('mongoose');
+var express = require('express');
+var nconf = require('nconf');
 
 module.exports = function(opts) {
 
@@ -10,16 +10,12 @@ module.exports = function(opts) {
 
   // init actions
   seneca.add('init:customer', init);
-  require('./actions')(seneca);
 
   return;
 
   function init(args, done) {
+    var port = nconf.get('authServicePort');
     var app = express();
-    var mongodb = opts.mongodb;
-    var authServicePort = opts.authServicePort;
-
-    mongoose.connect(mongodb);
 
     // register middlewares
     app.use(cors());
@@ -27,7 +23,8 @@ module.exports = function(opts) {
     app.use(passport.initialize());
     app.use(require('./routers/auth'));
 
-    app.listen(authServicePort, function() {done()});
+    app.listen(port);
+    done();
   }
 
 };

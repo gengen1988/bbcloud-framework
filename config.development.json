@@ -1,6 +1,6 @@
 {
   "secret": "secret",
-  "mongodb": "mongodb://localhost/customer",
+  "mongodb": "mongodb://127.0.0.1/customer",
   "authServicePort": 3001,
   "wechat": {
     "appId": "APP_ID",
