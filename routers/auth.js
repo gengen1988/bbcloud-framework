@@ -20,12 +20,16 @@ var wechatOpts = {
 passport.use(new LocalStrategy(CustomerAccount.authenticate()));
 passport.use(new WeChatStrategy(wechatOpts, wechatVerify));
 
-router.post('/auth/customer/login', passport.authenticate('local', {session: false}), signIn);
+router.post('/auth/customer/sign-up', signUp);
+router.post('/auth/customer/sign-in', passport.authenticate('local', {session: false}), signIn);
 router.post('/auth/customer/wechat/authenticate', passport.authenticate('wechat', {session: false}), signIn);
-router.post('/auth/customer/register', signUp);
+router.post('/auth/customer/wechat/callback', wechatCallback);
 
 function wechatVerify(accessToken, refreshToken, profile, done) {
   return done(null, profile);
+}
+
+function wechatCallback(req, res, next) {
 }
 
 function signIn(req, res, next) {
