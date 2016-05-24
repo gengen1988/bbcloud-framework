@@ -23,8 +23,7 @@ module.exports = function(opts) {
     app.use(passport.initialize());
     app.use(require('./routers/auth'));
 
-    app.listen(port);
-    done();
+    app.listen(port, done);
   }
 
 };

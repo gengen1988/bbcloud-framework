@@ -41,11 +41,15 @@ function signIn(req, res, next) {
 }
 
 function signUp(req, res, next) {
-  var mobilePhoneNumber = req.body.mobilePhoneNumber;
+  console.log(req.body);
+  var username = req.body.mobilePhoneNumber;
   var password = req.body.password;
+  console.log(username);
+  console.log(password);
 
-  CustomerAccount.register(new CustomerAccount({mobilePhoneNumber}), password, function(err) {
-    res.json({msg: 'ok'});
+  CustomerAccount.register(new CustomerAccount({username}), password, function(err) {
+    console.log(arguments);
+    res.json({msg: 'ok'});clear
   });
 }
 
