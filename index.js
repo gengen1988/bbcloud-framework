@@ -1,5 +1,6 @@
 var nconf = require('nconf');
 var mongoose = require('mongoose');
+require('./models/customer-account');
 
 nconf.argv().env();
 var NODE_ENV = nconf.get('NODE_ENV') || 'development';
@@ -13,4 +14,4 @@ require('seneca')()
     secret: nconf.get('secret')
   })
   .use('mongoose-entity', {mongoose})
-  .listen();
+  .listen({port: nconf.get('seneca:customer:port')});

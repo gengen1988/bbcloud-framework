@@ -2,6 +2,7 @@
   "secret": "secret",
   "mongodb": "mongodb://127.0.0.1/customer",
   "authServicePort": 3001,
+  "senecaPort": 10102,
   "wechat": {
     "appId": "APP_ID",
     "appSecret": "APP_SECRET",
@@ -9,5 +10,19 @@
     "callbackUrl": "callbackurl",
     "scope": "snapi_userinfo",
     "state": "state"
+  },
+  "seneca": {
+    "administrator": {
+      "port": 10103
+    },
+    "manufacturer": {
+      "port": 10102
+    },
+    "device": {
+      "port": 10104
+    },
+    "customer": {
+      "port": 10101
+    }
   }
 }
