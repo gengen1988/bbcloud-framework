@@ -17,13 +17,13 @@ var wechatOpts = {
   state: nconf.get('wechat:state')
 };
 
-passport.use(new LocalStrategy(CustomerAccount.authenticate()));
+passport.use(CustomerAccount.createStrategy());
 passport.use(new WeChatStrategy(wechatOpts, wechatVerify));
 
-router.post('/auth/customer/sign-up', signUp);
-router.post('/auth/customer/sign-in', passport.authenticate('local', {session: false}), signIn);
-router.post('/auth/customer/wechat/authenticate', passport.authenticate('wechat', {session: false}), signIn);
-router.post('/auth/customer/wechat/callback', wechatCallback);
+router.post('/customer/auth/signup', signup);
+router.post('/customer/auth/login', passport.authenticate('local', {session: false}), issueTokenForLocal);
+router.post('/customer/auth/wechat/authenticate', passport.authenticate('wechat', {session: false}), issueTokenForWeChat);
+router.get(nconf.get('wechat:callbackUrl'), wechatCallback);
 
 function wechatVerify(accessToken, refreshToken, profile, done) {
   return done(null, profile);
@@ -32,24 +32,23 @@ function wechatVerify(accessToken, refreshToken, profile, done) {
 function wechatCallback(req, res, next) {
 }
 
-function signIn(req, res, next) {
-  var customerId = req.user._id;
+function issueTokenForWeChat(req, res, next) {
+}
 
+function issueTokenForLocal(req, res, next) {
+  var customerId = req.user._id.toString();
   jwt.sign({realm: 'customer'}, secret, {subject: customerId}, function(err, token) {
+    if (err) return next(err);
     res.json({token});
   });
 }
 
-function signUp(req, res, next) {
-  console.log(req.body);
-  var username = req.body.mobilePhoneNumber;
+function signup(req, res, next) {
+  var mobilePhoneNumber = req.body.mobilePhoneNumber;
   var password = req.body.password;
-  console.log(username);
-  console.log(password);
-
-  CustomerAccount.register(new CustomerAccount({username}), password, function(err) {
-    console.log(arguments);
-    res.json({msg: 'ok'});clear
+  CustomerAccount.register(new CustomerAccount({mobilePhoneNumber}), password, function(err) {
+    if (err) return next(err);
+    res.json({msg: 'ok'});
   });
 }
 
